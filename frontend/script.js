@@ -22,12 +22,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         const result = await response.json();
-        document.getElementById("output").textContent = "User Register Successfully";
+        document.getElementById("output").textContent = "User Registered Successfully";
     });
 
     // Login Form Submission
     document.getElementById("login-form").addEventListener("submit", async (event) => {
         event.preventDefault();
+        document.getElementById("admin_actions").style.display = "none";
 
         const email = document.getElementById("login-email").value;
         const password = document.getElementById("login-password").value;
@@ -44,11 +45,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         const result = await response.json();
+        console.log(result);
         if (result.access_token) {
             localStorage.setItem("token", result.access_token);
             document.getElementById("output").textContent = "Login successful!";
+
         } else {
             document.getElementById("output").textContent = "Login failed!";
+        }
+        console.log(result.is_admin);
+        if (result.is_admin) {
+            document.getElementById("admin_actions").style.display = "block"; // Show admin actions
         }
     });
 
@@ -62,46 +69,46 @@ document.addEventListener("DOMContentLoaded", () => {
                 "Authorization": `Bearer ${token}`,
             },
         });
-        if(response.status===200){
+        if (response.status === 200) {
             const result = await response.json();
-    
+
             // Create a table element
             const table = document.createElement("table");
             table.border = 1;
-    
+
             // Create the header row
             const headerRow = document.createElement("tr");
-            const headers = ["ID", "Name", "Email", "Is Admin","Action"];
+            const headers = ["ID", "Name", "Email", "Is Admin", "Action"];
             headers.forEach(header => {
                 const th = document.createElement("th");
                 th.textContent = header;
                 headerRow.appendChild(th);
             });
             table.appendChild(headerRow);
-    
+
             // Populate the table with the users data
             result.forEach(user => {
                 const row = document.createElement("tr");
-    
+
                 const idCell = document.createElement("td");
                 idCell.textContent = user.id;
                 row.appendChild(idCell);
-    
+
                 const nameCell = document.createElement("td");
                 nameCell.textContent = user.name;
                 row.appendChild(nameCell);
-    
+
                 const emailCell = document.createElement("td");
                 emailCell.textContent = user.email;
                 row.appendChild(emailCell);
-    
+
                 const isAdminCell = document.createElement("td");
                 isAdminCell.textContent = user.is_admin ? "Yes" : "No";
                 row.appendChild(isAdminCell);
 
                 const actionsCell = document.createElement("td");
                 // Add a delete button for admin users
-                
+
                 if (user.is_admin === false) {
                     const deleteButton = document.createElement("button");
                     deleteButton.textContent = "Delete";
@@ -112,20 +119,21 @@ document.addEventListener("DOMContentLoaded", () => {
                     actionsCell.appendChild(deleteButton);
                 }
                 row.appendChild(actionsCell);
-    
+
                 table.appendChild(row);
             });
-    
+
             // Clear previous output and display the table
             const outputDiv = document.getElementById("output");
             outputDiv.innerHTML = ""; // Clear previous content
             outputDiv.appendChild(table);
         }
-        else{
+        else {
             const outputDiv = document.getElementById("output");
             outputDiv.innerHTML = "You are Not allowed";
         }
     });
+
     async function deleteUser(userId) {
         const token = localStorage.getItem("token");
 

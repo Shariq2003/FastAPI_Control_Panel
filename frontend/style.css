@@ -74,3 +74,8 @@ th, td {
 th {
     background-color: #f2f2f2;
 }
+
+#admin-actions {
+    display: none;
+    background-color: black;
+}
