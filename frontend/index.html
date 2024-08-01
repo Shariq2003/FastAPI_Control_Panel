@@ -9,7 +9,7 @@
 <body>
     <h1 class="heading">FastAPI Application</h1>
     <div class="container">
-        
+
         <!-- Registration Form -->
         <div id="registration-form">
             <h2>Register</h2>
@@ -22,15 +22,15 @@
                 <input type="password" id="register-password" required>
                 <label for="register-role">Role:</label>
                 <select id="register-role">
-                    <option value=0>Normal User</option>
-                    <option value=1>Admin</option>
+                    <option value="0">Normal User</option>
+                    <option value="1">Admin</option>
                 </select>
                 <button type="submit">Register</button>
             </form>
         </div>
 
         <!-- Login Form -->
-        <div id="login-form">
+        <div id="login-section">
             <h2>Login</h2>
             <form id="login-form">
                 <label for="login-email">Email:</label>
@@ -45,11 +45,14 @@
         <div id="admin_actions" style="display: none;">
             <h2>Admin Actions</h2>
             <button id="get-users">Get All Users</button>
+            <button id="create-user">Add New User</button>
             <!-- Other admin actions can be added here -->
         </div>
 
-        <div id="output"></div>
+        <div id="output">
+        </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>

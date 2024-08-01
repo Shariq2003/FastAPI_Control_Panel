@@ -23,8 +23,6 @@ def login_for_access_token(db: Session = Depends(database.get_db), form_data: OA
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token = auth.create_access_token(data={"sub": user.email})
-    print(user.is_admin)
-    # id=crud.get_user_by_email()
     return {"access_token": access_token, "token_type": "bearer","is_admin":user.is_admin}
 
 

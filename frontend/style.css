@@ -10,11 +10,9 @@ body {
 }
 .container {
     display: flex;
-    /* max-width: 800px; */
-    /* height: 94vh; */
-    height:78vh;
     gap: 80px;
-    /* margin: 0 auto; */
+    /* min-height: 70vh; */
+    margin: 5rem;
     padding: 40px;
     background-color: #fff;
     border-radius: 8px;
@@ -77,5 +75,6 @@ th {
 
 #admin-actions {
     display: none;
-    background-color: black;
 }
+
+
