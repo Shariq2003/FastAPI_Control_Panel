@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const name = document.getElementById("register-name").value;
         const email = document.getElementById("register-email").value;
         const password = document.getElementById("register-password").value;
-        const is_admin = Boolean(document.getElementById("register-role").value);
+        const is_admin = Boolean(parseInt(document.getElementById("register-role").value));
 
         const response = await fetch("http://127.0.0.1:8000/register", {
             method: "POST",
@@ -62,49 +62,85 @@ document.addEventListener("DOMContentLoaded", () => {
                 "Authorization": `Bearer ${token}`,
             },
         });
+        if(response.status===200){
+            const result = await response.json();
+    
+            // Create a table element
+            const table = document.createElement("table");
+            table.border = 1;
+    
+            // Create the header row
+            const headerRow = document.createElement("tr");
+            const headers = ["ID", "Name", "Email", "Is Admin","Action"];
+            headers.forEach(header => {
+                const th = document.createElement("th");
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+            table.appendChild(headerRow);
+    
+            // Populate the table with the users data
+            result.forEach(user => {
+                const row = document.createElement("tr");
+    
+                const idCell = document.createElement("td");
+                idCell.textContent = user.id;
+                row.appendChild(idCell);
+    
+                const nameCell = document.createElement("td");
+                nameCell.textContent = user.name;
+                row.appendChild(nameCell);
+    
+                const emailCell = document.createElement("td");
+                emailCell.textContent = user.email;
+                row.appendChild(emailCell);
+    
+                const isAdminCell = document.createElement("td");
+                isAdminCell.textContent = user.is_admin ? "Yes" : "No";
+                row.appendChild(isAdminCell);
+
+                const actionsCell = document.createElement("td");
+                // Add a delete button for admin users
+                
+                if (user.is_admin === false) {
+                    const deleteButton = document.createElement("button");
+                    deleteButton.textContent = "Delete";
+                    deleteButton.addEventListener("click", async () => {
+                        await deleteUser(user.id);
+                        row.remove(); // Remove the row from the table after deletion
+                    });
+                    actionsCell.appendChild(deleteButton);
+                }
+                row.appendChild(actionsCell);
+    
+                table.appendChild(row);
+            });
+    
+            // Clear previous output and display the table
+            const outputDiv = document.getElementById("output");
+            outputDiv.innerHTML = ""; // Clear previous content
+            outputDiv.appendChild(table);
+        }
+        else{
+            const outputDiv = document.getElementById("output");
+            outputDiv.innerHTML = "You are Not allowed";
+        }
+    });
+    async function deleteUser(userId) {
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(`http://127.0.0.1:8000/admin/users/${userId}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        });
 
         const result = await response.json();
-
-        // Create a table element
-        const table = document.createElement("table");
-        table.border = 1;
-
-        // Create the header row
-        const headerRow = document.createElement("tr");
-        const headers = ["ID", "Name", "Email", "Is Admin"];
-        headers.forEach(header => {
-            const th = document.createElement("th");
-            th.textContent = header;
-            headerRow.appendChild(th);
-        });
-        table.appendChild(headerRow);
-
-        // Populate the table with the users data
-        result.forEach(user => {
-            const row = document.createElement("tr");
-
-            const idCell = document.createElement("td");
-            idCell.textContent = user.id;
-            row.appendChild(idCell);
-
-            const nameCell = document.createElement("td");
-            nameCell.textContent = user.name;
-            row.appendChild(nameCell);
-
-            const emailCell = document.createElement("td");
-            emailCell.textContent = user.email;
-            row.appendChild(emailCell);
-
-            const isAdminCell = document.createElement("td");
-            isAdminCell.textContent = user.is_admin ? "Yes" : "No";
-            row.appendChild(isAdminCell);
-
-            table.appendChild(row);
-        });
-
-        // Clear previous output and display the table
-        const outputDiv = document.getElementById("output");
-        outputDiv.innerHTML = ""; // Clear previous content
-        outputDiv.appendChild(table);
-    });
+        if (result.status === "User deleted successfully") {
+            alert("User deleted successfully");
+        } else {
+            alert("Failed to delete user");
+        }
+    }
 });
