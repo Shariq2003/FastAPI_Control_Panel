@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import {Route, Routes, useActionData } from 'react-router-dom';
+import {Route, Routes } from 'react-router-dom';
 import HomePage from './pages/Home/HomePage';
 import AdminPage from './pages/Admin/AdminPage';
 import LoginPage from './pages/Login/LoginPage';
 import './App.css'
 import PrivateRoute from './components/PrivateRoute';
+import Dashboard from './pages/Dashboard/DashboardPage';
 
 const App = () => {
   const [is_admin, setIs_admin] = useState(localStorage.getItem("is_admin"));
@@ -15,7 +16,7 @@ const App = () => {
     <>
       <div className='container'>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="/register" element={<HomePage />} />
           <Route path="/login" element={<LoginPage loginHandler={loginHandler}/>} />
           <Route path="/admin" element={

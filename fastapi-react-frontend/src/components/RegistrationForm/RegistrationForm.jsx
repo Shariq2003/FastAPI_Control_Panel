@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate,Link } from 'react-router-dom';
+import AxiosApi from '../../services/axios.api';
+import { useNavigate, Link } from 'react-router-dom';
 import './RegistrationForm.css';
+import toast from 'react-hot-toast';
 
 const RegistrationForm = () => {
     const navigate = useNavigate();
@@ -13,17 +14,17 @@ const RegistrationForm = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://127.0.0.1:8000/register', {
+            await AxiosApi.post('/register', {
                 name,
                 email,
                 password,
                 is_admin: role === '1',
             });
-            alert('User Registered Successfully');
+            toast.success("User Registered Successfully");
             navigate('/login');
         } catch (error) {
             console.error(error);
-            alert('Registration Failed');
+            toast.error('Registration Failed');
         }
     };
 
@@ -65,7 +66,7 @@ const RegistrationForm = () => {
                     <option value="1">Admin</option>
                 </select>
                 <button type="submit" className="registration-button">Register</button>
-                <p>Already Registered ? <Link to="/login" className="login-link">Login Here</Link></p>
+                <p>Already Registered? <Link to="/login" className="login-link">Login Here</Link></p>
             </form>
         </div>
     );

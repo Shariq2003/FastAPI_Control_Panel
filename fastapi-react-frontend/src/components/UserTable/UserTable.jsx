@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './UserTable.css';
+import toast from 'react-hot-toast'
 
 const UserTable = () => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
         const fetchUsers = async () => {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             const response = await axios.get('http://127.0.0.1:8000/admin/users', {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -15,21 +16,25 @@ const UserTable = () => {
             });
             setUsers(response.data);
         };
-
+        
         fetchUsers();
     }, []);
 
     const handleDelete = async (userId) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this user?");
         if (confirmDelete) {
-            const token = localStorage.getItem('token');
-            await axios.delete(`http://127.0.0.1:8000/admin/users/${userId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            setUsers(users.filter(user => user.id !== userId));
-            alert('User deleted successfully.');
+            try {
+                const token = sessionStorage.getItem('token');
+                await axios.delete(`http://127.0.0.1:8000/admin/users/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setUsers(users.filter(user => user.id !== userId));
+                toast.success('User deleted successfully.');
+            } catch (error) {
+                toast.error('User deletion unsuccessfully.');
+            }
         }
     };
 

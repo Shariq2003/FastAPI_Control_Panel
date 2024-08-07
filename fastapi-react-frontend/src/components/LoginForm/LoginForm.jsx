@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import Auth from '../../services/auth';
 import { useNavigate,Link } from 'react-router-dom';
-import axios from 'axios';
 import './LoginForm.css';
+import toast from 'react-hot-toast';
+import AxiosApi from '../../services/axios.api';
 
 const LoginForm = ({ loginHandler }) => {
     const [email, setEmail] = useState('');
@@ -11,7 +13,7 @@ const LoginForm = ({ loginHandler }) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://127.0.0.1:8000/token', new URLSearchParams({
+            const response = await AxiosApi.post("/token", new URLSearchParams({
                 username: email,
                 password,
             }), {
@@ -19,17 +21,18 @@ const LoginForm = ({ loginHandler }) => {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
             });
-            localStorage.setItem('token', response.data.access_token);
-            if (response.data.is_admin) {
-                navigate('/admin');
-                localStorage.setItem('is_admin', response.data.is_admin);
+            Auth.saveAuthorizationToken(response.access_token);
+            Auth.saveRefreshToken(response.refresh_token);
+            await Auth.authorize(true);
+            toast.success("Login Successful!");
+            if (response.is_admin){
+                navigate('/admin')
             }
-            loginHandler();
-            alert('Login successful!');
-        } catch (error) {
-            console.error(error);
-            alert('Login failed!');
-            localStorage.setItem('is_admin', false);
+            else{
+                navigate('/user');
+            }
+        } catch (err) {
+            toast.error("Login failed. Please check your credentials!");
         }
     };
 
@@ -37,7 +40,7 @@ const LoginForm = ({ loginHandler }) => {
         <div className="login-container">
             <form onSubmit={handleLogin} className="login-form">
                 <h2 className="login-title">Login</h2>
-                <label>Email:</label>
+                <label>Email</label>
                 <input
                     type="email"
                     value={email}
@@ -45,7 +48,7 @@ const LoginForm = ({ loginHandler }) => {
                     required
                     className="login-input"
                 />
-                <label>Password:</label>
+                <label>Password</label>
                 <input
                     type="password"
                     value={password}
@@ -54,7 +57,7 @@ const LoginForm = ({ loginHandler }) => {
                     className="login-input"
                 />
                 <button type="submit" className="login-button">Login</button>
-                <p>Don't Have Account ?<Link to="/register" className="login-link"> Register Here</Link></p>
+                <p>Don't have an account? <Link to="/register" className="login-link">Register Here</Link></p>
             </form>
         </div>
     );
