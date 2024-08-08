@@ -33,9 +33,9 @@ const UserTable = () => {
         }
     },[navigate]);
 
-    const handleEdit =async(userId)=>{
+    // const handleEdit =async(userId)=>{
 
-    }
+    // }
 
     const handleDelete = async (userId) => {
         const confirmDelete = window.confirm('Are you sure you want to delete this user?');
@@ -76,7 +76,7 @@ const UserTable = () => {
                             <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Is Admin</th>
+                            <th>Role</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -96,12 +96,12 @@ const UserTable = () => {
                                         >
                                             Delete
                                         </button>
-                                        <button
+                                        {/* <button
                                             className="deleteButton"
                                             onClick={() => handleEdit(user.id)}
                                         >
                                             Edit
-                                        </button>
+                                        </button> */}
                                     </div>
                                     )}
                                 </td>

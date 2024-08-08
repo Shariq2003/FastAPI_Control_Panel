@@ -8,3 +8,12 @@
     justify-content: center;
     align-items: center;
 }
+.topbar-container h1{
+    margin-left: 165px;
+}
+
+@media (max-width: 768px) {
+    .topbar-container h1{
+        margin-left: 0;
+    }
+}
