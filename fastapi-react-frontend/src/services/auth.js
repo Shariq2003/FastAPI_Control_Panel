@@ -24,8 +24,8 @@ async function authorize(force) {
 
 
 function cleanAuth() {
-    saveAuthorizationToken();
-    saveRefreshToken();
+    // saveAuthorizationToken();
+    // saveRefreshToken();
     PrincipalService.clear();
 }
 

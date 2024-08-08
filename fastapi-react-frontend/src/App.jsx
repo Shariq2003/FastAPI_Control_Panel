@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
 import {Route, Routes } from 'react-router-dom';
 import HomePage from './pages/Home/HomePage';
-import AdminPage from './pages/Admin/AdminPage';
 import LoginPage from './pages/Login/LoginPage';
 import './App.css'
 import PrivateRoute from './components/PrivateRoute';
-import Dashboard from './pages/Dashboard/DashboardPage';
+import DashboardPage from './pages/Dashboard/DashboardPage';
 
 const App = () => {
-  const [is_admin, setIs_admin] = useState(localStorage.getItem("is_admin"));
-  function loginHandler(){
-    setIs_admin(localStorage.getItem("is_admin"));
+  const [role, setRole] = useState(sessionStorage.getItem("role"));
+  function loginHandler(role){
+    sessionStorage.setItem("role", role);
+    setRole(role);
   }
   return (
     <>
       <div className='container'>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<HomePage />} />
           <Route path="/login" element={<LoginPage loginHandler={loginHandler}/>} />
-          <Route path="/admin" element={
-            <PrivateRoute is_admin={is_admin}>
-              <AdminPage/>
+          <Route path="/dashboard" element={
+            <PrivateRoute role={role}>
+              <DashboardPage/>
             </PrivateRoute>
           } />
         <Route path="/*" element={<h3>Sorry this route is not defined yet</h3>} />

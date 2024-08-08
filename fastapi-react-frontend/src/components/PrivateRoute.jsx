@@ -1,8 +1,8 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom';
 
-const PrivateRoute = ({ is_admin, children }) => {
-    if (is_admin) {
+const PrivateRoute = ({ role, children }) => {
+    if (role) {
         return children;
     }
     else {

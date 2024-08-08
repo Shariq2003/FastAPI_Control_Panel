@@ -9,7 +9,7 @@ const RegistrationForm = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('0');
+    const [role, setRole] = useState('USER');
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -18,7 +18,7 @@ const RegistrationForm = () => {
                 name,
                 email,
                 password,
-                is_admin: role === '1',
+                role: role,
             });
             toast.success("User Registered Successfully");
             navigate('/login');
@@ -27,6 +27,7 @@ const RegistrationForm = () => {
             toast.error('Registration Failed');
         }
     };
+
 
     return (
         <div className="registration-container">
@@ -62,8 +63,8 @@ const RegistrationForm = () => {
                     onChange={(e) => setRole(e.target.value)}
                     className="registration-select"
                 >
-                    <option value="0">Normal User</option>
-                    <option value="1">Admin</option>
+                    <option value="USER">Normal User</option>
+                    <option value="ADMIN">Admin</option>
                 </select>
                 <button type="submit" className="registration-button">Register</button>
                 <p>Already Registered? <Link to="/login" className="login-link">Login Here</Link></p>

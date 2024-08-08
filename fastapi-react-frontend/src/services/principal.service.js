@@ -26,16 +26,11 @@ function clear() {
     PrincipalState.clear();
 }
 
-function hasAnyRole(roles) {
+function hasAnyRole(role) {
     let _identity = PrincipalState.getIdentity();
     if (!PrincipalState.isAuthenticated() || !_identity || !_identity.roles)
         return false;
-    let foundAtleastOneRole = false;
-    roles.forEach((role) => {
-        let matchedRole = _identity.roles.find((userRole) => userRole === role);
-        if (typeof matchedRole != "undefined") foundAtleastOneRole = true;
-    });
-    return foundAtleastOneRole;
+    return _identity.role===role;
 }
 
 function isAdmin() {

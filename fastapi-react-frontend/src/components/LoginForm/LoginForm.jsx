@@ -24,13 +24,9 @@ const LoginForm = ({ loginHandler }) => {
             Auth.saveAuthorizationToken(response.access_token);
             Auth.saveRefreshToken(response.refresh_token);
             await Auth.authorize(true);
+            loginHandler(response.role);
             toast.success("Login Successful!");
-            if (response.is_admin){
-                navigate('/admin')
-            }
-            else{
-                navigate('/user');
-            }
+            navigate('/dashboard');
         } catch (err) {
             toast.error("Login failed. Please check your credentials!");
         }

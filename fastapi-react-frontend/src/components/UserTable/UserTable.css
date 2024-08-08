@@ -1,7 +1,4 @@
-/* UserTable.css */
-
 .userTable-container {
-    width: 100vw;
     overflow-x: auto;
     margin-top: 20px;
     display: flex;

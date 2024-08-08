@@ -1,7 +1,7 @@
 import Axios from "axios";
 import Auth from "./auth";
 
-const baseUrl = 'http://127.0.0.1:8000'
+const baseUrl = 'http://127.0.0.1:8000';
 
 const instance = Axios.create({
     baseURL: baseUrl,
@@ -55,17 +55,11 @@ instance.interceptors.response.use(
     }
 );
 
-
-const init = () => {
-    instance.defaults.headers["Cache-Control"] = "no-cache";
-    // Access-Control-Allow-Origin: *
-    // instance.defaults.headers["Access-Control-Allow-Origin"] = "*";
-    // instance.defaults.withCredentials = true;
-};
-
-const get = async (url) => {
+const get = async (url, object) => {
     try {
-        const { data, status } = await instance.get(url);
+        const { data, status } = await instance.get(url, {
+            headers: object,
+        });
         if (status === 200) {
             return data;
         } else {
@@ -76,9 +70,15 @@ const get = async (url) => {
     }
 };
 
-const post = async (url, object) => {
+const post = async (url, object, config = {}) => {
     try {
-        const { data, status } = await instance.post(url, object);
+        const { data, status } = await instance.post(url, object, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                ...config.headers,  // Merge custom headers with default Authorization header
+            },
+            ...config,  // Merge custom config options
+        });
         if (status === 200) {
             return data;
         } else {
@@ -91,7 +91,11 @@ const post = async (url, object) => {
 
 const put = async (url, object) => {
     try {
-        const { data, status } = await instance.put(url, object);
+        const { data, status } = await instance.put(url, object, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+        });
         if (status === 200) {
             return data;
         } else {
@@ -102,9 +106,13 @@ const put = async (url, object) => {
     }
 };
 
-const del = async (url, object) => {
+const del = async (url) => {
     try {
-        const { data, status } = await instance.delete(url, object);
+        const { data, status } = await instance.delete(url, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+        });
         if (status === 200) {
             return data;
         } else {
@@ -118,7 +126,6 @@ const del = async (url, object) => {
 const AxiosApi = {
     baseUrl,
     instance,
-    init,
     get,
     post,
     put,
