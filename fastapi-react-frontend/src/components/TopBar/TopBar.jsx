@@ -6,7 +6,7 @@ const TopBar = () => {
   return (
     <>
       <div className='topbar-container'>
-            <h1>ERP Portal</h1>
+            <h1 style={{marginLeft:"165px"}}>ERP Portal</h1>
       </div>
     </>
   )
