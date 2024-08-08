@@ -45,7 +45,7 @@ This project is a full-stack application with React as the frontend and FastAPI 
      
   1. **Install dependencies**
      ```bash
-     Install dependencies
+     npm i
      
   2. **Update environment variables**
       - Rename .env.example to .env.
