@@ -8,7 +8,8 @@
 }
 
 .userTable {
-    width: 50vw;
+    min-width: 300px;
+    width: 70%;
     border-collapse: collapse;
     background-color: #fff;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -45,3 +46,11 @@
 .deleteButton:hover {
     background-color: #c0392b;
 }
+
+@media (max-width: 568px) {
+    .userTable td:nth-child(3),
+    .userTable th:nth-child(3) {
+        display: none;
+    }
+}
+

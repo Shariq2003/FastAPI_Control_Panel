@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Auth from '../../services/auth'; // Adjust import as needed
-import PrincipalService from '../../services/principal.service'; // Adjust import as needed
+import PrincipalService from '../../services/principal.service';
 import { FaCircleUser } from "react-icons/fa6";
+import toast from 'react-hot-toast';
+import AxiosApi from '../../services/axios.api';
 import "./UserProfile.css";
 
 const UserProfile = () => {
@@ -11,13 +12,26 @@ const UserProfile = () => {
         email: '',
         role: '',
     });
+    const [name, setName] = useState('');
+    const [password, setPassword] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
 
     const fetchUserProfile = async () => {
         try {
             const userProfile = await PrincipalService.identity();
             setUser(userProfile);
-        } catch (err) {
-            console.error('Failed to fetch user profile:', err);
+            setName(userProfile.name);
+        } catch (error) {
+            console.error('Error Fetching User Details:', error);
+            let errorMessage = 'Error Fetching User Details';
+            if (error.response) {
+                errorMessage = error.response.data.detail || 'Error Fetching User Details';
+            } else if (error.request) {
+                errorMessage = 'No response from server';
+            } else {
+                errorMessage = 'Error: ' + error.message;
+            }
+            toast.error(`Error Fetching User Details: ${errorMessage}`);
         }
     };
 
@@ -26,9 +40,30 @@ const UserProfile = () => {
     }, []);
 
     const handleEditProfile = () => {
-        // Implement edit profile functionality
-        console.log('Edit profile button clicked');
+        setIsEditing(true);
     };
+    const handleSaveProfile = async (e) => {
+        e.preventDefault();
+        try {
+            await AxiosApi.put('/users/me', {
+                name,
+                password,
+            });
+            toast.success("Profile Updated Successfully");
+        } catch (error) {
+            console.error('Error adding user:', error);
+            let errorMessage = 'Registration Failed';
+            if (error.response) {
+                errorMessage = error.response.data.detail || 'Registration Failed';
+            } else if (error.request) {
+                errorMessage = 'No response from server';
+            } else {
+                errorMessage = 'Error: ' + error.message;
+            }
+            toast.error(`Registration Failed: ${errorMessage}`);
+        }
+        setIsEditing(false);
+    }
 
     return (
         <div className='user-profile-container'>
@@ -44,7 +79,13 @@ const UserProfile = () => {
                     </div>
                     <div className="form-group">
                         <label>Name:</label>
-                        <input type="text" value={user.name} readOnly />
+                        <input
+                            type="text"
+                            value={name}
+                            autoComplete='name'
+                            onChange={(e) => setName(e.target.value)}
+                            readOnly={!isEditing}
+                        />
                     </div>
                     <div className="form-group">
                         <label>Email:</label>
@@ -54,7 +95,25 @@ const UserProfile = () => {
                         <label>Role:</label>
                         <input type="text" value={user.role} readOnly />
                     </div>
-                    <button type="button" onClick={handleEditProfile} className="edit-button">Edit Profile</button>
+                    {isEditing && (
+                        <div className="form-group">
+                            <label>Password:</label>
+                            <input
+                                type="password"
+                                value={password}
+                                autoComplete='password'
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Enter new password"
+                            />
+                        </div>
+                    )}
+                    <button
+                        type="button"
+                        onClick={isEditing ? handleSaveProfile : handleEditProfile}
+                        className="edit-button"
+                    >
+                        {isEditing ? 'Save Profile' : 'Edit Profile'}
+                    </button>
                 </form>
             </div>
         </div>

@@ -23,8 +23,16 @@ const RegistrationForm = () => {
             toast.success("User Registered Successfully");
             navigate('/login');
         } catch (error) {
-            console.error(error);
-            toast.error('Registration Failed');
+            console.error('Error adding user:', error);
+            let errorMessage = 'Registration Failed';
+            if (error.response) {
+                errorMessage = error.response.data.detail || 'Registration Failed';
+            } else if (error.request) {
+                errorMessage = 'No response from server';
+            } else {
+                errorMessage = 'Error: ' + error.message;
+            }
+            toast.error(`Registration Failed: ${errorMessage}`);
         }
     };
 
@@ -39,6 +47,7 @@ const RegistrationForm = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
+                    autoComplete='name'
                     className="registration-input"
                 />
                 <label>Email:</label>
@@ -47,6 +56,7 @@ const RegistrationForm = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    autoComplete='email'
                     className="registration-input"
                 />
                 <label>Password:</label>
@@ -55,6 +65,7 @@ const RegistrationForm = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    autoComplete='password'
                     className="registration-input"
                 />
                 <label>Role:</label>

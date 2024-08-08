@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AxiosApi from '../../services/axios.api'; // Import your AxiosApi
+import AxiosApi from '../../services/axios.api';
 import './UserTable.css';
 import toast from 'react-hot-toast';
 
@@ -8,19 +8,28 @@ const UserTable = () => {
     const navigate = useNavigate();
     const [users, setUsers] = useState([]);
 
-    const fetchUsers = async () => {
+    const fetchUsers = useCallback(async() => {
         try {
             const token=sessionStorage.getItem('token')
             const data = await AxiosApi.get('/admin/users', {
                 Authorization: `Bearer ${token}`,
             });
             setUsers(data);
-            toast.success('Users Fetched Successfully!');
+            toast.success("Users Fetched Successfully!", { id: 'fetch-users-success' });
         } catch (error) {
-            toast.error('Error in fetching Data');
+            console.error('Error in fetching Data! :', error);
+            let errorMessage = 'Error in fetching Data!';
+            if (error.response) {
+                errorMessage = error.response.data.detail || 'Error in fetching Data!';
+            } else if (error.request) {
+                errorMessage = 'No response from server!';
+            } else {
+                errorMessage = 'Error! : ' + error.message;
+            }
+            toast.error(`Registration Failed! : ${errorMessage}`, { id: 'fetch-users-error' });
             navigate('/login');
         }
-    };
+    },[navigate]);
 
     const handleDelete = async (userId) => {
         const confirmDelete = window.confirm('Are you sure you want to delete this user?');
@@ -31,16 +40,25 @@ const UserTable = () => {
                     Authorization: `Bearer ${token}`,
                 });
                 setUsers(users.filter(user => user.id !== userId));
-                toast.success('User deleted successfully.');
+                toast.success('User deleted successfully');
             } catch (error) {
-                toast.error('User deletion unsuccessful.');
+                console.error('Error in deleting the user! :', error);
+                let errorMessage = 'Deletion Failed!';
+                if (error.response) {
+                    errorMessage = error.response.data.detail || 'Deletion Failed!';
+                } else if (error.request) {
+                    errorMessage = 'No response from server!';
+                } else {
+                    errorMessage = 'Error! : ' + error.message;
+                }
+                toast.error(`User deletion unsuccessful! ${errorMessage}`);
             }
         }
     };
 
     useEffect(() => {
         fetchUsers();
-    }, []);
+    }, [fetchUsers]);
 
     return (
         <>

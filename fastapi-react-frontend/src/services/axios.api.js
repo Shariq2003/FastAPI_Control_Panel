@@ -1,7 +1,8 @@
 import Axios from "axios";
 import Auth from "./auth";
 
-const baseUrl = 'http://127.0.0.1:8000';
+const baseUrl = process.env.REACT_APP_SERVER_API_URL;
+// const baseUrl = 'http://127.0.0.1:8000';
 
 const instance = Axios.create({
     baseURL: baseUrl,
@@ -75,9 +76,9 @@ const post = async (url, object, config = {}) => {
         const { data, status } = await instance.post(url, object, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-                ...config.headers,  // Merge custom headers with default Authorization header
+                ...config.headers,
             },
-            ...config,  // Merge custom config options
+            ...config,
         });
         if (status === 200) {
             return data;

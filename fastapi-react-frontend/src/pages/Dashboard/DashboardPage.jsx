@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useCallback } from 'react'
 import TopBar from '../../components/TopBar/TopBar'
 import SideBar from '../../components/SideBar/SideBar'
 import Auth from '../../services/auth'
@@ -9,6 +9,7 @@ import AdminDashboard from '../../components/AdminDashboard/AdminDashboard'
 import UserDashboard from '../../components/UserDashboard/UserDashboard'
 import UserTable from "../../components/UserTable/UserTable"
 import UserProfile from '../../components/UserProfile/UserProfile'
+import AddNewUser from '../../components/AddNewUser/AddNewUser'
 import './DashboardPage.css'
 import toast from 'react-hot-toast'
 
@@ -16,17 +17,19 @@ const DashboardPage = () => {
     const [role, setRole] = useState(sessionStorage.getItem("role"));
     const [selectedAction, setSelectedAction] = useState("Dashboard");
     const navigate = useNavigate();
-    const authorize = async () => {
+    const authorize = useCallback (async() => {
         try {
             await Auth.authorize();
             await PrincipalService.isAuthenticated()
             const userIdentity = PrincipalState.getIdentity();
             setRole(userIdentity.role);
-        } catch (err) {
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error(`Error in Accesing Dashboard!`);
             navigate("/login");
         }
 
-    };
+    },[navigate]);
 
     const AdminActions = [
         { "title": "Profile" },
@@ -47,7 +50,7 @@ const DashboardPage = () => {
                 case "Users":
                     return <UserTable/>;
                 case "Add New User":
-                    return <div><h1>Add New User</h1></div>;
+                    return <AddNewUser/>;
                 case "Logout":
                     return;
                 default:
@@ -67,26 +70,26 @@ const DashboardPage = () => {
     const handleActionClick = (action) => {
         setSelectedAction(action);
     };
-    const handleLogout = () => {
+    const handleLogout = useCallback(async() => {
         toast.success("Logout Successfully!");
         Auth.cleanAuth();
-        sessionStorage.removeItem("role"); // Clear role from sessionStorage
-        navigate("/login"); // Redirect to login page
-    };
+        sessionStorage.removeItem("role");
+        navigate("/login");
+    },[navigate]);
     useEffect(() => {
         authorize();
-    }, []); // Added empty dependency array to run only once on mount
+    }, [authorize]);
 
     useEffect(() => {
         if (selectedAction === "Logout") {
             handleLogout();
         }
-    }, [selectedAction]);
+    }, [selectedAction, handleLogout]);
     return (
         <>
             <div className='dashboard-container'>
                 <TopBar />
-                <div className='content-conatiner'>
+                <div className='content-container'>
                     <SideBar Actions={role === "ADMIN" ? (AdminActions) : (UserActions)} handleActionClick={handleActionClick}/>
                     {
                         role === "ADMIN" ? (

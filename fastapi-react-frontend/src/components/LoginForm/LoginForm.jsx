@@ -27,8 +27,17 @@ const LoginForm = ({ loginHandler }) => {
             loginHandler(response.role);
             toast.success("Login Successful!");
             navigate('/dashboard');
-        } catch (err) {
-            toast.error("Login failed. Please check your credentials!");
+        } catch (error) {
+            console.error('Error adding user:', error);
+            let errorMessage = 'Login Failed';
+            if (error.response) {
+                errorMessage = error.response.data.detail || 'Login Failed';
+            } else if (error.request) {
+                errorMessage = 'No response from server';
+            } else {
+                errorMessage = 'Error: ' + error.message;
+            }
+            toast.error(`Login Failed: ${errorMessage}`);
         }
     };
 
@@ -42,6 +51,7 @@ const LoginForm = ({ loginHandler }) => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    autoComplete='email'
                     className="login-input"
                 />
                 <label>Password</label>
@@ -49,6 +59,7 @@ const LoginForm = ({ loginHandler }) => {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    autoComplete='password'
                     required
                     className="login-input"
                 />
