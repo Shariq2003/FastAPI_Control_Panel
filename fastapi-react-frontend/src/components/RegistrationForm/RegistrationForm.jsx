@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import AxiosApi from '../../services/axios.api';
 import { useNavigate, Link } from 'react-router-dom';
-import './RegistrationForm.css';
 import toast from 'react-hot-toast';
+
+import AxiosApi from '../../services/axios.api';
+
+import './RegistrationForm.css';
 
 const RegistrationForm = () => {
     const navigate = useNavigate();

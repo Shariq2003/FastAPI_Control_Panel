@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import PrincipalService from '../../services/principal.service';
 import { FaCircleUser } from "react-icons/fa6";
 import toast from 'react-hot-toast';
+
+import PrincipalService from '../../services/principal.service';
 import AxiosApi from '../../services/axios.api';
+
 import "./UserProfile.css";
 
 const UserProfile = () => {

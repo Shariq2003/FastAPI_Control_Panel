@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AxiosApi from '../../services/axios.api';
-import './UserTable.css';
 import toast from 'react-hot-toast';
+
+import AxiosApi from '../../services/axios.api';
+
+import './UserTable.css';
 
 const UserTable = () => {
     const navigate = useNavigate();

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import Auth from '../../services/auth';
 import { useNavigate,Link } from 'react-router-dom';
-import './LoginForm.css';
 import toast from 'react-hot-toast';
+
+import Auth from '../../services/auth';
 import AxiosApi from '../../services/axios.api';
+
+import './LoginForm.css';
 
 const LoginForm = ({ loginHandler }) => {
     const [email, setEmail] = useState('');

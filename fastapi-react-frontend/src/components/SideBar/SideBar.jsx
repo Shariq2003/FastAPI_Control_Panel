@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { getIcon } from '../../assets/icons';
+
+import { getIcon } from '../../utils/icons';
+
 import './SideBar.css';
 
 const SideBar = ({ Actions, handleActionClick }) => {

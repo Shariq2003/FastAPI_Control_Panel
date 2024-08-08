@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import AxiosApi from '../../services/axios.api';
-import './AddNewUser.css';
 import toast from 'react-hot-toast';
+
+import AxiosApi from '../../services/axios.api';
+
+import './AddNewUser.css';
 
 const AddNewUser = () => {
     const [name, setName] = useState('');

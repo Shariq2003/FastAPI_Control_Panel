@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import {Route, Routes } from 'react-router-dom';
+
+//Pages
 import HomePage from './pages/Home/HomePage';
 import LoginPage from './pages/Login/LoginPage';
-import './App.css'
-import PrivateRoute from './components/PrivateRoute';
 import DashboardPage from './pages/Dashboard/DashboardPage';
+
+//Components
+import PrivateRoute from './components/PrivateRoute';
+
+//StylingnSheets
+import './App.css'
 
 const App = () => {
   const [role, setRole] = useState(sessionStorage.getItem("role"));

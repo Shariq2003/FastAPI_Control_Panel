@@ -1,17 +1,23 @@
 import React, { useEffect, useState,useCallback } from 'react'
-import TopBar from '../../components/TopBar/TopBar'
-import SideBar from '../../components/SideBar/SideBar'
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast'
+
+//Services
 import Auth from '../../services/auth'
 import PrincipalService from '../../services/principal.service'
 import PrincipalState from '../../services/principal.state'
-import { useNavigate } from 'react-router-dom';
+
+//Components
+import TopBar from '../../components/TopBar/TopBar'
+import SideBar from '../../components/SideBar/SideBar'
 import AdminDashboard from '../../components/AdminDashboard/AdminDashboard'
 import UserDashboard from '../../components/UserDashboard/UserDashboard'
 import UserTable from "../../components/UserTable/UserTable"
 import UserProfile from '../../components/UserProfile/UserProfile'
 import AddNewUser from '../../components/AddNewUser/AddNewUser'
+
+//Styling Sheets
 import './DashboardPage.css'
-import toast from 'react-hot-toast'
 
 const DashboardPage = () => {
     const [role, setRole] = useState(sessionStorage.getItem("role"));
