@@ -65,7 +65,7 @@ This project is a full-stack application with React as the frontend and FastAPI 
 - `app/crud.py`: Contains CRUD operations for interacting with the database.
 - `app/auth.py`: Handles authentication and token creation.
 - `app/database.py`: Configures database connection and session management.
-- `app/routers/`: Contains route definitions and logic.
+
 
 ### Frontend
 
