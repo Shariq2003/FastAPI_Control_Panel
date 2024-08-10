@@ -28,7 +28,7 @@ const UserTable = () => {
             } else {
                 errorMessage = 'Error! : ' + error.message;
             }
-            toast.error(`Registration Failed! : ${errorMessage}`, { id: 'fetch-users-error' });
+            toast.error(`Error in fetching Data! : ${errorMessage}`, { id: 'fetch-users-error' });
             navigate('/login');
         }
     },[navigate]);

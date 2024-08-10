@@ -7,6 +7,9 @@ const baseUrl = process.env.REACT_APP_SERVER_API_URL;
 const instance = Axios.create({
     baseURL: baseUrl,
     responseType: "json",
+    headers: {
+        'Cache-Control': 'no-cache',
+    }
 });
 
 instance.interceptors.request.use(
@@ -56,10 +59,13 @@ instance.interceptors.response.use(
     }
 );
 
-const get = async (url, object) => {
+const get = async (url, customHeaders = {}) => {
     try {
         const { data, status } = await instance.get(url, {
-            headers: object,
+            headers: {
+                'Cache-Control': 'no-cache', // Default cache control header
+                ...customHeaders
+            }
         });
         if (status === 200) {
             return data;

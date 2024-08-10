@@ -21,6 +21,7 @@ const LoginForm = ({ loginHandler }) => {
             }), {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
+                    'Cache-Control': 'max-age=300',
                 },
             });
             Auth.saveAuthorizationToken(response.access_token);
