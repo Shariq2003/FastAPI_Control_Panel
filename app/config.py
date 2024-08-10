@@ -13,4 +13,9 @@ class Settings:
     JWT_ALGORITHM = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
+    REDIS_HOST = os.getenv("REDIS_HOST", "redis://localhost:6379")
+    REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", None) 
+    REDIS_PORT = os.getenv("REDIS_PORT", 6379)
+    REDIS_DB = os.getenv("REDIS_DB", 0)
+
 settings = Settings()
